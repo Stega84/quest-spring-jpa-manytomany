@@ -4,7 +4,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Wizard {
@@ -15,10 +21,26 @@ public class Wizard {
     private String firstName;
     private String lastName;
     private Date birthday;
-    private String birthPlace;
+    
+    public List<Course> getCourses() {
+		return course;
+	}
+
+	public void setCourse(List<Course> course) {
+		this.course = course;
+	}
+
+	private String birthPlace;
     private String biography;
     private boolean muggle;
-
+    
+    @ManyToMany
+    @JoinTable(name = "wizard_course",
+        joinColumns = @JoinColumn(name = "wizard_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private List<Course> course = new ArrayList<>();
+    
     public Wizard() {
     }
 

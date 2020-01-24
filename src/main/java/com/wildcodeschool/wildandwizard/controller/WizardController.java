@@ -65,7 +65,8 @@ public class WizardController {
     @PostMapping("/wizard/register")
     public String postRegister(@RequestParam Long idWizard,
                                @RequestParam Long idCourse) {
-
+    	
+    	boolean isRegistered = false;
         Optional<Wizard> optionalWizard = wizardRepository.findById(idWizard);
         if (optionalWizard.isPresent()) {
             Wizard wizard = optionalWizard.get();
@@ -81,7 +82,14 @@ public class WizardController {
                 if (method != null) {
                     try {
                         courses = (List<Course>) method.invoke(wizard);
-                        courses.add(course);
+                        for(Course element:courses) {
+                        	if(element.getId()==idCourse) {
+                        		isRegistered = true;
+                        	}
+                        }
+                        if(!isRegistered) {
+                        	courses.add(course);
+                        }                       
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
                     }
